@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CEC",
+    "ADA",
+    "CBC"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:paper"
+    },
+    "B": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:leather"
+    },
+    "D": {
+      "item": "minecraft:book"
+    },
+    "E": {
+      "item": "minecraft:compass"
+    }
+  },
+  "result": {
+    "item": "numismatics-loot:numismatics_encyclopedia",
+    "count": 1
+  }
+}

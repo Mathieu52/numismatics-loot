@@ -22,6 +22,7 @@ public class NumismaticsLootConfig {
     private final RewardConfig rewardConfig = new RewardConfig(RewardMode.DEFAULT_REWARD);
     private final DropRateConfig dropRateConfig = new DropRateConfig();
     private final LootingConfig lootingConfig = new LootingConfig();
+	private final GrantBookConfig grantBookConfig = new GrantBookConfig();
     private final PlayerKillConfig playerKillConfig = new PlayerKillConfig();
 
 
@@ -47,6 +48,10 @@ public class NumismaticsLootConfig {
         return lootingConfig;
     }
 
+	public GrantBookConfig getGrantBookConfig() {
+		return grantBookConfig;
+	}
+
     public PlayerKillConfig getPlayerKillConfig() {
         return playerKillConfig;
     }
@@ -69,6 +74,7 @@ public class NumismaticsLootConfig {
                 this.rewardConfig.deserialize(tomlReader);
                 this.dropRateConfig.deserialize(tomlReader);
                 this.lootingConfig.deserialize(tomlReader);
+				this.grantBookConfig.deserialize(tomlReader);
                 this.playerKillConfig.deserialize(tomlReader);
 
                 modifiers.clear();

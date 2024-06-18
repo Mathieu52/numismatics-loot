@@ -1,6 +1,7 @@
 package net.xzera;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -8,6 +9,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.advancements.critereon.DamageSourcePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.PlayerPredicate;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -15,7 +18,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -25,8 +30,10 @@ import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.xzera.config.NumismaticsLootConfig;
 import net.xzera.currency.Currency;
+import net.xzera.item.NumismaticsEncyclopediaItem;
 import net.xzera.modifier.Modifier;
 import net.xzera.modifier.MobCategoryEntityModifier;
 import net.xzera.registry.DropInfo;
@@ -54,9 +61,21 @@ public class NumismaticsLoot implements ModInitializer {
     public void onInitialize() {
 		LOGGER.info("Initializing...");
 
+		Registry.register(BuiltInRegistries.ITEM, NumismaticsEncyclopediaItem.BOOK_ID, NumismaticsEncyclopediaItem.BOOK_ITEM);
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(content -> {
+			content.addAfter(Items.BOOK, NumismaticsEncyclopediaItem.BOOK_ITEM);
+		});
+
+
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
 			LOGGER.info("Registering: " + id.toString());
             updateLootTables(id, tableBuilder);
+
+			if (CONFIG.getGrantBookConfig().isGrantBook() && id.equals(new ResourceLocation(MOD_ID, "grant_book_on_first_join"))) {
+				LootPoolEntryContainer.Builder<?> entry =LootItem.lootTableItem(NumismaticsEncyclopediaItem.BOOK_ITEM).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)));
+				LootPool.Builder builder = LootPool.lootPool().with(entry.build());
+				tableBuilder.pool(builder.build());
+			}
         });
 
         ServerPlayConnectionEvents.JOIN.register((networkHandler, packetSender, server) -> {

@@ -13,6 +13,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Blocks;
 import net.xzera.book.BookContentRegistry;
 import net.xzera.currency.Currency;
+import net.xzera.item.NumismaticsEncyclopediaItem;
 import net.xzera.registry.DropInfo;
 
 import java.nio.file.Path;
@@ -23,8 +24,6 @@ import static net.xzera.book.Formatting.HORIZONTAL_RULES;
 import static net.xzera.book.Formatting.PAGE_BREAK;
 
 public class NumismaticsLootClient implements ClientModInitializer {
-
-	private static final ResourceLocation BOOK_ID = new ResourceLocation(MOD_ID, "reward_book");
 	private static final ResourceLocation HUNTING_CATEGORY_ID = new ResourceLocation(MOD_ID, "hunting_category");
 	private static final ResourceLocation TREASURE_CATEGORY_ID = new ResourceLocation(MOD_ID, "treasure_category");
 
@@ -47,7 +46,7 @@ public class NumismaticsLootClient implements ClientModInitializer {
 					},
 					false, dropInfo.getReward(), ImmutableSet.of(), ImmutableSet.of(), content);
 
-			BookContentRegistry.addEntry(BOOK_ID, bookEntry);
+			BookContentRegistry.addEntry(NumismaticsEncyclopediaItem.BOOK_ID, bookEntry);
 		});
 
 		ClientPlayNetworking.registerGlobalReceiver(NumismaticsLoot.CHEST_DROP_INFO_ID, (client, handler, buf, responseSender) -> {
@@ -67,7 +66,7 @@ public class NumismaticsLootClient implements ClientModInitializer {
 					sizing -> Components.block(Blocks.CHEST.defaultBlockState()).sizing(sizing),
 					false, dropInfo.getReward(), ImmutableSet.of(), ImmutableSet.of(), content);
 
-			BookContentRegistry.addEntry(BOOK_ID, bookEntry);
+			BookContentRegistry.addEntry(NumismaticsEncyclopediaItem.BOOK_ID, bookEntry);
 		});
 
 		ClientPlayNetworking.registerGlobalReceiver(NumismaticsLoot.CLEAR_DROP_INFO_ID, (client, handler, buf, responseSender) -> BookContentRegistry.clear());
