@@ -3,10 +3,8 @@
 //file:noinspection GradlePackageVersionRange
 plugins {
 	id "fabric-loom" version "1.6.11+"
-	id 'java-library'
 	id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
 	id "maven-publish"
-	id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17

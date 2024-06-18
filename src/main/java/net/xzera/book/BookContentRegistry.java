@@ -17,6 +17,9 @@ public class BookContentRegistry {
                 continue;
 
             for (Category category : categories) {
+				if (categories.contains(category))
+					continue;
+
                 ((BookInvoker) (Object) book).addCategoryInvoker(category);
             }
         }
@@ -27,6 +30,9 @@ public class BookContentRegistry {
                 continue;
 
             for (Entry entry : entries) {
+				if (entries.contains(categories))
+					continue;
+
                 ((BookInvoker) (Object) book).addEntryInvoker(entry);
             }
         }
