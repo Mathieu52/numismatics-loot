@@ -67,7 +67,7 @@ dependencies {
 	modImplementation "io.wispforest:lavender:${project.lavender_version}"
 	include "io.wispforest:owo-sentinel:${project.owo_version}" // check owo's page for this version
 
-	shadow(implementation('com.moandjiezana.toml:toml4j:0.7.2'))
+	implementation('com.moandjiezana.toml:toml4j:0.7.2');
 
 	// Recipe Viewers - Create Fabric supports JEI, REI, and EMI.
 	// See root gradle.properties to choose which to use at runtime.
@@ -112,22 +112,6 @@ machete {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = Integer.parseInt(sourceCompatibility)
-}
-
-jar {
-	from "LICENSE"
-	archiveClassifier.set("dev")
-}
-
-shadowJar {
-	configurations = [project.configurations.shadow]
-	archiveClassifier.set("dev")
-	relocate "net.objecthunter", "de.siphalor.spiceoffabric.shadow.net.objecthunter"
-}
-
-remapJar {
-	dependsOn(shadowJar)
-	inputFile = tasks.shadowJar.archiveFile
 }
 
 java {
