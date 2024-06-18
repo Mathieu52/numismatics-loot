@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "numismatics-loot",
   "version": "${version}",
-  "name": "Example Mod",
+  "name": "Numismatics loot",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
     "Me!"
@@ -11,20 +11,25 @@
     "sources": "https://github.com/Fabricators-of-Create/create-fabric-addon-template"
   },
   "license": "CC0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/numismatics-loot/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.modid.ExampleMod"
+      "net.xzera.NumismaticsLoot"
+    ],
+    "client": [
+      "net.xzera.NumismaticsLootClient"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "numismatics-loot.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": ">=${fabric_api_version}",
     "create": "${create_version}",
-    "minecraft": "${minecraft_version}"
+    "minecraft": "${minecraft_version}",
+    "lavender": "${lavender_version}",
+    "owo": "${owo_version}"
   }
 }

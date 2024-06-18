@@ -1,0 +1,17 @@
+{
+  "text.config.loot-server.enum.modificationType.none" : "Ignore",
+  "text.config.loot-server.enum.modificationType.modify" : "Multiply",
+  "text.config.loot-server.enum.modificationType.replace" : "Set",
+
+  "text.config.loot-server.category.nestedObject" : "Modifier",
+
+  "text.config.loot-server.option.nestedObject.enabled" : "Enabled",
+
+  "text.config.loot-server.category.nestedObject.reward" : "Reward",
+  "text.config.loot-server.option.nestedObject.reward.type" : "Type",
+  "text.config.loot-server.option.nestedObject.reward.value" : "Value",
+
+  "text.config.loot-server.category.nestedObject.probability" : "Probability",
+  "text.config.loot-server.option.nestedObject.probability.type" : "Type",
+  "text.config.loot-server.option.nestedObject.probability.value" : "Value"
+}

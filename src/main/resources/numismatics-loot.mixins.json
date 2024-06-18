@@ -1,12 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.example.modid.mixin",
+  "package": "net.xzera.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "DeployerBlockEntityAccessor",
+    "DeployerBlockEntityMixin"
   ],
   "client": [
-    "MinecraftMixin"
+    "BookInvoker",
+    "BookLoaderMixin"
   ],
   "injectors": {
     "defaultRequire": 1
