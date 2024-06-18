@@ -3,12 +3,12 @@
   "id": "numismatics-loot",
   "version": "${version}",
   "name": "Numismatics loot",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Adds chest loot and mob drops to Create:Numismatics, with fully versatile configuration options.",
   "authors": [
-    "Me!"
+    "Xz3ra"
   ],
   "contact": {
-    "sources": "https://github.com/Fabricators-of-Create/create-fabric-addon-template"
+    "sources": "https://github.com/Mathieu52/numismatics-loot"
   },
   "license": "CC0",
   "icon": "assets/numismatics-loot/icon.png",
