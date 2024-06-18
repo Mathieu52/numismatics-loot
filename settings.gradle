@@ -3,10 +3,6 @@ pluginManagement {
 		maven { url = "https://maven.fabricmc.net/" }
 		maven { url = "https://server.bbkr.space/artifactory/libs-release/" }
 		maven { url = "https://maven.quiltmc.org/repository/release" }
-		maven {
-			name = 'Siphalor'
-			url = 'https://maven.siphalor.de/'
-		}
 		mavenCentral()
 		gradlePluginPortal()
 	}

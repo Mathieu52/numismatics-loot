@@ -6,7 +6,7 @@ plugins {
 	id 'java-library'
 	id "io.github.p03w.machete" version "1.+" // automatic jar compressing on build
 	id "maven-publish"
-	id 'com.github.johnrengelman.shadow' version '7.1.0' // Add the Shadow plugin
+	id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -21,6 +21,8 @@ String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
 version = "${mod_version}+${minecraft_version}" + (buildNumber != null ? "-${buildNumber}" : "")
 
 repositories {
+	mavenLocal();
+	mavenCentral();
 	maven { url 'https://maven.wispforest.io' }
 	maven { url = "https://maven.shedaniel.me/" } // Cloth Config, REI
 	maven { url = "https://maven.blamejared.com/" } // JEI
@@ -65,7 +67,7 @@ dependencies {
 	modImplementation "io.wispforest:lavender:${project.lavender_version}"
 	include "io.wispforest:owo-sentinel:${project.owo_version}" // check owo's page for this version
 
-	shadow(implementation 'com.moandjiezana.toml:toml4j:0.7.2')
+	shadow(implementation('com.moandjiezana.toml:toml4j:0.7.2'))
 
 	// Recipe Viewers - Create Fabric supports JEI, REI, and EMI.
 	// See root gradle.properties to choose which to use at runtime.
@@ -120,7 +122,7 @@ jar {
 shadowJar {
 	configurations = [project.configurations.shadow]
 	archiveClassifier.set("dev")
-	relocate "com.moandjiezana.toml", "net.xzera.shadow.com.moandjiezana.toml"
+	relocate "net.objecthunter", "de.siphalor.spiceoffabric.shadow.net.objecthunter"
 }
 
 remapJar {
