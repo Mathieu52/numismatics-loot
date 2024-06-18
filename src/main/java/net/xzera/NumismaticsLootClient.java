@@ -3,6 +3,8 @@ package net.xzera;
 import com.google.common.collect.ImmutableSet;
 //import io.wispforest.lavender.book.*;
 //import io.wispforest.owo.ui.component.Components;
+import io.wispforest.lavender.book.Entry;
+import io.wispforest.owo.ui.component.Components;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,11 +18,11 @@ import net.xzera.registry.DropInfo;
 import java.nio.file.Path;
 import java.util.HashMap;
 
+import static net.xzera.NumismaticsLoot.MOD_ID;
 import static net.xzera.book.Formatting.HORIZONTAL_RULES;
 import static net.xzera.book.Formatting.PAGE_BREAK;
 
 public class NumismaticsLootClient implements ClientModInitializer {
-	public static final String MOD_ID = "numismatics-loot";
 
 	private static final ResourceLocation BOOK_ID = new ResourceLocation(MOD_ID, "reward_book");
 	private static final ResourceLocation HUNTING_CATEGORY_ID = new ResourceLocation(MOD_ID, "hunting_category");
@@ -28,7 +30,7 @@ public class NumismaticsLootClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		/*ClientPlayNetworking.registerGlobalReceiver(NumismaticsLoot.ENTITY_DROP_INFO_ID, (client, handler, buf, responseSender) -> {
+		ClientPlayNetworking.registerGlobalReceiver(NumismaticsLoot.ENTITY_DROP_INFO_ID, (client, handler, buf, responseSender) -> {
 			ResourceLocation resourceLocation = buf.readResourceLocation();
 			DropInfo dropInfo = new DropInfo(buf.readInt(), buf.readFloat());
 
@@ -38,8 +40,11 @@ public class NumismaticsLootClient implements ClientModInitializer {
 
 			Entry bookEntry = new Entry(resourceLocation,
 					HUNTING_CATEGORY_ID,
-					entityType.toShortString(),
-					sizing -> Components.entity(sizing, entityType.create(client.level)),
+					entityType.getDescription().getString(),
+					sizing -> {
+						assert client.level != null;
+						return Components.entity(sizing, entityType.create(client.level));
+					},
 					false, dropInfo.getReward(), ImmutableSet.of(), ImmutableSet.of(), content);
 
 			BookContentRegistry.addEntry(BOOK_ID, bookEntry);
@@ -49,7 +54,7 @@ public class NumismaticsLootClient implements ClientModInitializer {
 			ResourceLocation resourceLocation = buf.readResourceLocation();
 			DropInfo dropInfo = new DropInfo(buf.readInt(), buf.readFloat());
 
-			String content = getChestContent(resourceLocation, dropInfo);
+			String content = getChestContent(dropInfo);
 
 			String title = Path.of(resourceLocation.getPath()).getFileName().toString().strip().replace("_", " ");
 			if (title.length() > 0) {
@@ -65,13 +70,11 @@ public class NumismaticsLootClient implements ClientModInitializer {
 			BookContentRegistry.addEntry(BOOK_ID, bookEntry);
 		});
 
-		ClientPlayNetworking.registerGlobalReceiver(NumismaticsLoot.CLEAR_DROP_INFO_ID, (client, handler, buf, responseSender) -> {
-			BookContentRegistry.clear();
-		});*/
+		ClientPlayNetworking.registerGlobalReceiver(NumismaticsLoot.CLEAR_DROP_INFO_ID, (client, handler, buf, responseSender) -> BookContentRegistry.clear());
 	}
 
-	String getEntityContent(ResourceLocation identifier, DropInfo dropInfo) {
-		String content = String.format("<entity;%s>", identifier.toString());
+	String getEntityContent(ResourceLocation resourceLocation, DropInfo dropInfo) {
+		String content = String.format("<entity;%s>", resourceLocation.toString());
 		content += HORIZONTAL_RULES;
 
 		content += getDropInfoContent(dropInfo);
@@ -79,7 +82,7 @@ public class NumismaticsLootClient implements ClientModInitializer {
 		return content;
 	}
 
-	String getChestContent(ResourceLocation identifier, DropInfo dropInfo) {
+	String getChestContent(DropInfo dropInfo) {
 		String content = "<block;minecraft:chest>";
 		content += HORIZONTAL_RULES;
 
@@ -98,20 +101,13 @@ public class NumismaticsLootClient implements ClientModInitializer {
 
 		HashMap<Currency, Integer> coins = Currency.fromValue(dropInfo.getReward());
 
-		boolean start = true;
 		for (Currency coin : Currency.values()) {
 			int value = coins.get(coin);
 
 			if (value == 0)
 				continue;
 
-			if (start)
-				start = false;
-			//else
-				//content.append(HORIZONTAL_RULES);
-
 			content.append(String.format("<item;%s>", coin.getIdentifier()));
-
 			content.append(String.format("%s", value));
 		}
 

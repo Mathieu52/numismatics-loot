@@ -1,12 +1,9 @@
 package net.xzera;
 
-import com.tterrag.registrate.util.entry.ItemEntry;
-
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.advancements.critereon.DamageSourcePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -22,13 +19,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.xzera.config.NumismaticsLootConfig;
 import net.xzera.currency.Currency;
@@ -38,7 +33,6 @@ import net.xzera.registry.DropInfo;
 import net.xzera.registry.RewardRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Attr;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -88,11 +82,6 @@ public class NumismaticsLoot implements ModInitializer {
             }
         });
     }
-
-    private void addModifier(Modifier modifier, boolean state) {
-        CONFIG.getModifiers().add(new ModifierConfig(modifier, state));
-    }
-
     public static EntityType<?> getEntity(ResourceLocation resourceLocation) {
         return MobCategoryEntityModifier.LOOT_TABLE_ID_TO_ENTITY_TYPE.get(resourceLocation);
     }
@@ -141,8 +130,13 @@ public class NumismaticsLoot implements ModInitializer {
 
             LootPool.Builder builder = LootPool.lootPool().with(entry.build());
 
-            if (CONFIG.getPlayerKillConfig().isOnlyDropWhenKilledByPlayer()) {
-                PlayerPredicate player = PlayerPredicate.Builder.player().checkAdvancementDone(new ResourceLocation(MOD_ID, "root"), true).build();
+            if (CONFIG.getPlayerKillConfig().isAllowOnlyPlayerKillDrop()) {
+				PlayerPredicate player;
+				if (CONFIG.getPlayerKillConfig().isAllowDeployerKillDrop()) {
+					player = PlayerPredicate.Builder.player().build();
+				} else {
+					player = PlayerPredicate.Builder.player().checkAdvancementDone(new ResourceLocation(MOD_ID, "root"), true).build();
+				}
 				EntityPredicate entityPredicate = EntityPredicate.Builder.entity().subPredicate(player).build();
 				builder.conditionally(DamageSourceCondition.hasDamageSource(DamageSourcePredicate.Builder.damageType().source(entityPredicate)).build());
             }

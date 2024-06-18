@@ -4,11 +4,12 @@ import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.TomlWriter;
 import net.xzera.ModifierConfig;
 import net.xzera.NumismaticsLoot;
+import net.xzera.config.Exception.DeserializationException;
+
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +25,9 @@ public class NumismaticsLootConfig {
     private final PlayerKillConfig playerKillConfig = new PlayerKillConfig();
 
 
-	private Logger logger;
+	private final Logger logger;
 	private NumismaticsLootConfig(Logger logger) {
-		modifiers = new ArrayList<ModifierConfig>();
+		modifiers = new ArrayList<>();
 		this.logger = logger;
 	}
 
@@ -64,7 +65,7 @@ public class NumismaticsLootConfig {
 		logger.info(path.toString());
         try {
             if (file.exists()) {
-				Toml tomlReader = new Toml().read(Files.readString(path));
+				Toml tomlReader = new Toml().read(file);
                 this.rewardConfig.deserialize(tomlReader);
                 this.dropRateConfig.deserialize(tomlReader);
                 this.lootingConfig.deserialize(tomlReader);
@@ -72,20 +73,20 @@ public class NumismaticsLootConfig {
 
                 modifiers.clear();
                 List<Toml> modifiersToml = tomlReader.getTables("modifiers");
-                for (Toml toml : modifiersToml) {
-                    ModifierConfig modifierConfig = new ModifierConfig(null);
-                    modifierConfig.deserialize(toml);
-                    this.modifiers.add(modifierConfig);
-                }
+				if (modifiersToml != null) {
+					for (Toml toml : modifiersToml) {
+						ModifierConfig modifierConfig = new ModifierConfig(null);
+						modifierConfig.deserialize(toml);
+						this.modifiers.add(modifierConfig);
+					}
+				}
             } else {
                 this.save(path);
             }
-        //} catch (DeserializationException e) {
-			//logger.error(e.getMessage(), e);
-            //throw new RuntimeException(e);
-        } catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
+        } catch (DeserializationException e) {
+			logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean save(Path path) {
@@ -118,16 +119,5 @@ public class NumismaticsLootConfig {
 			logger.error(e.getMessage(), e);
 		}
         return true;
-    }
-
-    public void log() {
-        logger.info("Reward mode: " + rewardConfig.getMode());
-        logger.info("Reward value: " + rewardConfig.getValue());
-
-        logger.info("Drop rate: " + dropRateConfig.getBaseDropRate());
-
-        logger.info("Looting config: " + lootingConfig.isAllowed());
-
-        logger.info("Drop on player kill only: " + playerKillConfig.isOnlyDropWhenKilledByPlayer());
     }
 }

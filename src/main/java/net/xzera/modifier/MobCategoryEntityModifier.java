@@ -14,8 +14,9 @@ import java.util.Map;
 
 public class MobCategoryEntityModifier extends Modifier {
     private static final MobCategory DEFAULT_SPAWN_GROUP = null;
+	private static final String KEY = "category";
 
-    private MobCategory mobCategory;
+	private MobCategory mobCategory;
 
     public static final HashMap<ResourceLocation, EntityType<? extends Entity>> LOOT_TABLE_ID_TO_ENTITY_TYPE = new HashMap<>();
 
@@ -25,7 +26,7 @@ public class MobCategoryEntityModifier extends Modifier {
         }
     }
 
-    public MobCategoryEntityModifier(MobCategory mobCategory, ModificationTarget target, ModificationType type, float value) {
+	public MobCategoryEntityModifier(MobCategory mobCategory, ModificationTarget target, ModificationType type, float value) {
         super(target, type, value);
         setMobCategory(mobCategory);
     }
@@ -65,7 +66,7 @@ public class MobCategoryEntityModifier extends Modifier {
     @Override
     public Map<String, Object> serialize(boolean includeParent) {
         Map<String, Object> map = new HashMap<>();
-        map.put("spawn-group", mobCategory.getName());
+        map.put(KEY, mobCategory.getName());
 
         if (includeParent)
             map.putAll(ReadOnlyModifier.serialize(this));
@@ -93,11 +94,11 @@ public class MobCategoryEntityModifier extends Modifier {
 
     @Override
     public void deserialize(Toml toml) throws DeserializationException {
-        if (!toml.contains("spawn-group")) {
-            throw new DeserializationException("Failed to deserialize spawn group modifier: spawn-group field is missing. Valid options are: " + validOptions());
+        if (!toml.contains(KEY)) {
+            throw new DeserializationException("Failed to deserialize mob category modifier: " + KEY + " field is missing. Valid options are: " + validOptions());
         }
 
-        String strValue = toml.getString("spawn-group");
+        String strValue = toml.getString(KEY);
 
         this.mobCategory = null;
         for (MobCategory category : MobCategory.values()) {
@@ -108,6 +109,6 @@ public class MobCategoryEntityModifier extends Modifier {
             }
         }
 
-        throw new DeserializationException("Failed to deserialize spawn group modifier: " + strValue + " isn't a valid spawn-group option. Valid options are: " + validOptions());
+        throw new DeserializationException("Failed to deserialize mob category modifier: " + strValue + " isn't a valid " + KEY + " option. Valid options are: " + validOptions());
     }
 }

@@ -10,10 +10,9 @@ public class ConfigFormatting {
 
     static {
         MODIFIER_TO_HEADER.put(EntityModifier.class, "entity");
-        MODIFIER_TO_HEADER.put(MobCategoryEntityModifier.class, "spawn-group");
+        MODIFIER_TO_HEADER.put(MobCategoryEntityModifier.class, "mob-category");
         MODIFIER_TO_HEADER.put(RawModifier.class, "table");
         MODIFIER_TO_HEADER.put(RawSectionModifier.class, "section");
-        MODIFIER_TO_HEADER.put(AllModifier.class, "all");
 
         for (Class<? extends Modifier> modifier : MODIFIER_TO_HEADER.keySet()) {
             HEADER_TO_MODIFIER.put(MODIFIER_TO_HEADER.get(modifier), modifier);

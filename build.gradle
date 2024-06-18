@@ -21,8 +21,8 @@ String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
 version = "${mod_version}+${minecraft_version}" + (buildNumber != null ? "-${buildNumber}" : "")
 
 repositories {
-	mavenLocal();
-	mavenCentral();
+	mavenLocal()
+	mavenCentral()
 	maven { url 'https://maven.wispforest.io' }
 	maven { url = "https://maven.shedaniel.me/" } // Cloth Config, REI
 	maven { url = "https://maven.blamejared.com/" } // JEI
@@ -61,7 +61,7 @@ dependencies {
 	modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_version}")
 
 	// Development QOL
-	modLocalRuntime("maven.modrinth:lazydfu:${lazydfu_version}")
+	//modLocalRuntime("maven.modrinth:lazydfu:${lazydfu_version}")
 	modLocalRuntime("com.terraformersmc:modmenu:${modmenu_version}")
 
 	modImplementation "io.wispforest:lavender:${project.lavender_version}"
