@@ -115,6 +115,7 @@ tasks.withType(JavaCompile).configureEach {
 shadowJar {
 	configurations = [project.configurations.shadow]
 	archiveClassifier.set("dev")
+	relocate "com.moandjiezana.toml", "net.xzera.shadow.com.moandjiezana.toml"
 }
 
 remapJar {
