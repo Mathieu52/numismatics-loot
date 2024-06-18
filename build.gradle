@@ -112,6 +112,11 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.release = Integer.parseInt(sourceCompatibility)
 }
 
+jar {
+	from "LICENSE"
+	archiveClassifier.set("dev")
+}
+
 shadowJar {
 	configurations = [project.configurations.shadow]
 	archiveClassifier.set("dev")
